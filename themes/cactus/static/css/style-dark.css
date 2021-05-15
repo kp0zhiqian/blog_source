@@ -633,7 +633,7 @@ body {
 #header #nav ul li {
   display: inline-block;
   margin-right: 15px;
-  border-right: 1px dotted;
+  /* border-right: 1px dotted; */
   border-color: #2bbc8a;
   vertical-align: middle;
 }
