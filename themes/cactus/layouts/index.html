@@ -1,10 +1,10 @@
 {{ define "main" }}
-  <section id="about">
+<section id="about">
   {{ if isset .Site.Params "description" }}
-    {{ .Site.Params.description }}
+  {{ .Site.Params.description }}
   {{ end }}
   {{ if isset .Site.Params "social" }}
-      <p>
+  <p>
       {{ $length := (len .Site.Params.social) }}
       {{ range $index, $elem := .Site.Params.social}}
       {{ if eq $elem.name "email" }}
@@ -25,11 +25,11 @@
         </a>
         {{ end }}
         {{ if (lt (add $index 2) $length) }}
-          {{- print " | " -}}
+          {{- print " " -}}
         {{ else if (lt (add $index 1) $length) }}
-          {{- print " | " -}}
+          {{- print " " -}}
         {{ else }}
-          {{- print "" -}}
+          {{- print " " -}}
         {{ end }}
       {{ end }}
       </p>
