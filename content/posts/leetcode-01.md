@@ -1,6 +1,6 @@
 ---
 title: "Leetcode记录"
-date: 2021-4-28T00:11:23+08:00
+date: 2021-04-28T00:11:23+08:00
 draft: false
 tags:
     - leetcode

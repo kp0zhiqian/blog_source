@@ -1,6 +1,6 @@
 ---
-title: "From Sequence Number to TCP"
-date: 2021-5-14T00:11:23+08:00
+title: "From Simple Reliable Transport Protocol to TCP (1)"
+date: 2021-05-14T00:11:23+08:00
 draft: false
 tags:
     - tcp
@@ -8,7 +8,6 @@ keywords:
     - tcp seq
 ---
 
-# From Simple Reliable Transport Protocol to TCP (1)
 
 In the first article of this series of articles, we'll discuss the concepts we need to implement to design a very basic reliable transport protocol.  How to implement these concepts will be covered in future articles.
 

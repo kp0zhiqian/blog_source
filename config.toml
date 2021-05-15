@@ -1,6 +1,6 @@
 baseURL = "https://kp0zhiqian.github.io"
 languageCode = "en-us"
-title = "kp0zhiqian's Blog"
+title = "kp0zhiqian's"
 theme = "cactus"
 copyright = "You" # cactus will use title if copyright is not set
 disqusShortname = "example" # Used when comments is enabled. Cactus will use site title if not set
@@ -38,12 +38,12 @@ weight = 4
 
 [params]
 
-  colortheme = "dark" # dark, light, white, or classic
+  colortheme = "classic" # dark, light, white, or classic
   rss = true # generate rss feed. default value is false
   googleAnalyticsAsync = true # use asynchronous tracking. Synchronous tracking by default
 
   # Home page settings
-  description = "I work hard so my cat can live a better live."
+  description = "This is the way."
   mainSection = "posts" # your main section
   showAllPostsOnHomePage = false # default
   postsOnHomePage = 10 # this option will be ignored if showAllPostsOnHomePage is set to true
