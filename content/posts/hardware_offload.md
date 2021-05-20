@@ -1,11 +1,11 @@
 ---
 title: "Understanding of OpenVswitch Hardware Loading"
-date: 2021-05-14T00:11:23+08:00
+date: 2021-05-20T00:11:23+08:00
 draft: false
 tags:
-    - tcp
+    - ovs
 keywords:
-    - tcp seq
+    - ovs hardware offloading
 ---
 
 This article will focus on the usage of hardware offloading in openvswitch. Our journey will start from the basic concept of openvswitch to the hardware offloading datapath. The driver we use is mlx5_core.
