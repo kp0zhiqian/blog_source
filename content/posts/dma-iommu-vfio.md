@@ -1,27 +1,30 @@
 ---
-title: "DMA, IOMMU and VFIO"
+title: "Understanding DMA, IOMMU, and VFIO"
 date: 2020-09-04T00:10:57+08:00
 draft: false
 category: notes
 tags:
-    - 系统
+    - system
 keywords:
     - DMA
     - IOMMU
     - VFIO
 ---
-## DMA
+## DMA (Direct Memory Access)
 
-一般来说，内存的读写操作，全部是由CPU来进行操作的，其他设备如果想需要针对内存进行读写，则必须经过CPU。而DMA操作则将这个过程中的CPU解放了出来。在设备需要对内存进行读写的时候，会告诉CPU，而CPU则会将系统总线让出来给设备的DMA控制器使用，DMA控制器会进行对内存的数据传输工作，传输结束后，CPU则会重新接管系统总线。这个方法一定程度上提高了系统的性能。
-## IOMMU
+Generally speaking, the read and write operation of memory will all issue by the CPU. The read and write of memory of other devices must issue through the CPU. DMA, as in Direct Memory Access, will release the CPU from such a process. When devices need to r/w the memory, they will report to the CPU. The CPU will give the system bus to the DMA controller. DMA controller will transmit the data between devices and memory. When completing the data transmitting, the CPU will retake the system bus. This process can improve the system performance.
 
-根据上边DMA的介绍可以得知，设备可以通过DMA访问内存中的地址。但这样会有一个问题，如果设备可以任意直接的访问内存中的地址的话，安全性很低，也是不应该允许这样做的。实际上，在传输数据的时候，CPU告诉DMA控制器需要访问的地址，是一个虚拟的地址，而IOMMU的功能就是将这个虚拟的地址转换成物理内存上的地址去访问，保证物理内存的安全性。DMA控制器通过IOMMU去访问内存，但是实际上即使没有IOMMU，DMA也可以正常工作，只是在这种情况下，设备就可以任意访问整个内存，内存上数据的安全性堪忧。
-### IOMMU和虚拟化
+## IOMMU (Input-Output Memory Management Unit)
 
-原本对于vm设备的虚拟化，是通过软件对设备进行模拟。而有了DMA和IOMMU的话，宿主机可以直接将物理设备暴露给虚拟机，同时又通过IOMMU保证了隔离安全性。
-## VFIO
+When we have DMA, devices can directly access the memory address they want, which will be a problem from the security perspective. We should ban such actions. In fact, when transmitting the data, the CPU will tell the DMA controller virtual memory addresses. IOMMU will translate such virtual memory addresses to actual physical memory addresses to keep the physical memory safe. DMA controller can access the memory through the IOMMU. Though we can also access the memory without IOMMU,  it's a bad security practice.
 
-通过上面我们知道，IOMMU提供了虚拟地址转化成物理地址的功能，通过IOMMU可以让物理硬件安全的访问内存中的地址。但IOMMU只是提供了一个地址转化的功能，用户态的程序要如何去使用IOMMU呢？这就引出了VFIO。VFIO实际上就是通过IOMMU，以一种安全的方式将IOMMU的功能开放到用户态中，以便用户态的程序编写对应的驱动来使用IOMMU这个功能。
+### IOMMU and Virtualization
+
+Before DMA and IOMMU, we used software to simulate hardware to achieve virtualization. With the help of DMA and IOMMU technology, we can expose the physical devices to VM and keep the isolation and security through IOMMU.
+
+## VFIO (Virtual Function I/O)
+
+IOMMU provides the ability to translate virtual memory addresses to physical memory addresses. IOMMU allows physical devices to access memory addresses safely. However, IOMMU only provided a translation ability. How does the user space program use it? Here comes the VFIO. VFIO exposes the IOMMU feature to the user space in a safe way so that the userspace program can develop corresponding drivers to use the IOMMU feature.
 
 
 
