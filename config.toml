@@ -6,7 +6,6 @@ copyright = "You" # cactus will use title if copyright is not set
 disqusShortname = "example" # Used when comments is enabled. Cactus will use site title if not set
 # googleAnalytics = "UA-1234-5"
 
-
 # summaryLength = 2
 
 # Main menu which appears below site header.
@@ -31,10 +30,18 @@ url = "/about"
 weight = 4
 
 [markup]
-  [markup.tableOfContents]
-    endLevel = 4
-    ordered = false
-    startLevel = 2
+    [markup.highlight]
+    anchorLineNos = true
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ''
+    lineAnchors = ''
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = true
+    style = 'monokai'
+    tabWidth = 4
 
 [params]
 
