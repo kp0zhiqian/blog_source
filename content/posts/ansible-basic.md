@@ -1,6 +1,6 @@
 ---
-title: "Ansible Reading Notes"
-date: 2020-09-30T00:10:57+08:00
+title: "Ansible Reading Notes - Basic"
+date: 2021-09-30T00:10:57+08:00
 draft: false
 category: notes
 tags:
@@ -17,26 +17,67 @@ keywords:
 - Redhat/Centos need to Install EPEL, fedora has it in its default source
 - Generate ssh, copy ssh to remote, save remote hosts to known_hosts
 
-## Host Inventory
+## Configuration
+default configuration file: ```/etc/ansible/ansible.cfg```
+
+basic options: 
+- ```inventory```: path to host list file
+- ```library```: path to extra module
+- ```remote_tmp```: remote host temp files path
+- ```local_tmp```: management node temp fiels path
+
+### configuration file priority
+Ansible will try to find configuration file in below order:
+1. ANSIBLE_CONFIG (env var)
+2. ansible.cfg (current directory)
+3. .ansible.cfg (home directory)
+4. /etc/ansible/ansible.cfg
+
+
+### Host Inventory
 - default host file: `/etc/ansible/hosts`
+    - use ```-i``` or ```--inventory-file``` to load separate host list
+    - ```ansible-playbook -i hosts site.yml```
 - We can use [group_name] to setup group, but it's not required
     ```bash
     [webservers]
     foo.example.com
     bar.example.com
     ```
+    - we can also nested the groups
+    ```bash
+    [atlanta]
+    host1
+    host2
+    [raleigh]
+    host2
+    host3
+
+    [southeast:children]
+    atlanta
+    raleigh
+    [usa:children]
+    southeast
+    ```
+- we can also assign connection param in inventory file:
+    ```bash
+    [targets]
+    localhost           ansible_connection=local
+    other1.example.com  ansible_connection=ssh  ansible_user=root   ansible_user=user1
+    ```
+- create vars for a group
+    ```bash
+    [atlanta]
+    host1
+    host2
+
+    [atlanta:vars]
+    ntp_server=ntp.atlanta.example.com
+    proxy=proxy.atalanta.example.com
 
 ## CLI tools
 - `ansible <host> [options]`
 - `ansibel <host> -m <modules>`
-
-## Playbook: A yaml file that can be excuted by ansible 
-- `ansible-playbook deploy.yml`
-- keywords:
-    - `hosts`: host IP or group name or all
-    - `remote_user`: excute using some uses
-    - `vars`: variables
-    - `tasks`: core of playbook, define action, every action can call a modules
 
 ## Module
 Ansible Module: `module` in ansible is `cmd` in bash
@@ -45,6 +86,12 @@ Ansible Module: `module` in ansible is `cmd` in bash
     - `-a <module_param>`
 - Use module in playbook
     - `module_name: module_option=option_value`
+- type of module
+  - Core module: doesn't need to download and install, core module will be well tested
+  - extra module: need to download and install, maybe bug
+    1. download: git clone xxxxx
+    2. change configuration file `/etc/ansible/ansible.cfg`, add `library = /home/$pathToExtraModule`, or change ansible.cfg in current directory or change ANSIBLE_LIBRARY
+  - check modules `ansible-doc module_name`
 - common modules
     - ping
         - not only check connectivity, also check ssh availiability and python version
@@ -109,3 +156,5 @@ Ansible Module: `module` in ansible is `cmd` in bash
             - `creates` excute only when file non-exist
             - `executable` use certain bash
     - command: similar to shell, but doesn't support operator
+
+

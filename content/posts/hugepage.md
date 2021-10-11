@@ -1,51 +1,50 @@
 ---
-title: "理解Hugepage"
+title: "Understanding Hugepage"
 date: 2020-10-20T00:11:23+08:00
 draft: false
 tags:
-    - 系统
+    - systems
 keywords:
     - Hugepage
 ---
-# Hugepage
+
+## Virtual Memory in Linux
+
+In a multi-task system, the operation to the memory of different processes will have conflict problems. To solve this problem, the concept of virtual memory comes. When the process starting, OS will assign virtual memory addresses for the process to use. Also, OS will map the virtual memory addresses to physical memory addresses. So we need to mapping the table to maintain the relationship between the virtual memory address and the physical memory address.
+
+However, if we 1:1 map the virtual and physical memory address, the table would be too large to search and maintain. To solve this problem, the concept of paging and page table comes. 
 
 
 
-## Linux中的虚拟内存
+## Linux Paging and Page Table
 
-在任务处理中，多个进程对内存的操作会有冲突的问题，为了解决这个问题，则提出了虚拟内存的概念。在进程开始运行时，操作系统会给进程分配虚拟内存地址供进程使用。而操作系统会将这部分虚拟内存地址根据进程的使用情况，来映射到具体的物理内存地址上。而因为有了这个映射关系，则操作系统就需要维护一个映射表。但是，如果将虚拟内存的地址一对一的映射到物理内存上，则需要维护的映射表的大小就太大了，所以为了解决这个问题，则引出了分页和页表的概念。
-
-
-
-## Linux中的分页和页表
-
-在Linux的内存管理中，为了节省空间，操作系统会在启动的时候将物理内存以默认4k的大小分割成各个页。而后在为虚拟内存分配物理内存时，都以页为单位。这样一来，虚拟内存到物理内存的这张映射表的大小就会小了很多。而对于某些大内存的情况，操作系统还设计了多级的映射表，这样映射表的大小又进一步的减小。这虚拟内存页到物理内存页的映射表，则被称为页表。
+In memory management, the OS will separate the physical memory into many pages (default size 4K). When the OS needs to allocate virtual memory addresses from physical memory addresses, it will assign pages. So that the mapping table between virtual memory address to physical memory address will be much smaller. In this case, we also need a table to maintain the mapping between the virtual pages and the physical pages. We called this table a paging table.
 
 
 
-## Hugepages的来源
+## Hugepages
 
-由上面我们可以知道，操作系统默认情况下会将内存以4k为单位分成不同的页。但是，在内存非常大的情况下，页的数量也会变的特别多，页的数量变大时，CPU检索内存地址的效率也会下降。所以，为了解决这个问题，只有增大页的大小，以此来减少页的数量，提高检索效率。这也就是Hugepages的由来。我们可以将Hugepages定义为2m, 4m, 6m等大小，最大可以定义为1G。
+The OS will use a 4K size to divide memory into many pages by default. However, when the memory size becomes large, the number of pages will also be large, which will cause low efficiency when the CPU searches the memory address page by page. To solve this problem, we can only extend the size of the pages to reduce the number of pages. That's the original concept of hugepages. We can define hugepages as 2M, 4M, 6M, and 1G max.
 
 
 
-## Hugepage相关术语
+## Hugepage Terminology
 
 ### TLB
 
-Translation Lookside Buffer，是CPU中一块固定大小的cache，用来保存一部分页表的对应关系，用来快速进行虚拟内存到物理内存的映射。
+Translation Lookside Buffer is a cache in CPU with a certain size to store parts of the paging table to accelerate the mapping between virtual memory and physical memory.
 
 
 
 ### hugetlb
 
-hugetlb指的是 TLB中，一条hugepage的条目。可以说hugetlb是用来处理映射hugepage的。
+hugetlb is the TLBs to process the mapping of hugepages.
 
 
 
 ### hugetlbfs
 
-hugetlbfs是一种机遇内存的文件系统类型，TLB通过hugetlb来指向hugepage，而这些操作系统分配的hugepage则会作为hugetlbfs内存文件系统中的文件来供内存使用。
+hugetlbfs is a file system type based on memory. TLB can point to the actual hugepage memory through hugetlb. The hugepages assigned by the OS will be used by the memory as the file in the hugetlbfs.
 
 
 
@@ -53,68 +52,67 @@ hugetlbfs是一种机遇内存的文件系统类型，TLB通过hugetlb来指向h
 
 ## Hugepage配置
 
-### 永久配置
+### Permanent Config
 
-修改`/etc/default/grub`的内容，在内核的启动参数`GRUB_CMDLINE_LINUX_DEFAULT`内增加：
+Change `/etc/default/grub` content，add
 
 ```shell
 default_hugepagesz=1G hugepagesz=1G hugepages=16 hugepagesz=2M hugepages=2048 iommu=pt intel_iommu=on isolcpus=1-13,15-27
 
-## isolcpus根据本身机器的cpu数量来配置
-## iommu和isolcpus用于虚拟化和dpdk隔离cpu上，与hugepage实际上关系不大
+## isolcpus depends on the cpu of your hosts
+## iommu and isolcpus is actually not related to hugepage
 ```
 
-生成grub配置
+after `GRUB_CMDLINE_LINUX_DEFAULT`.
+
+generate grub2 configuration
 
 ```shell
 grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
-重启
+reboot
 
 ```shell
 reboot
 ```
 
-重启后查看内核cmdline
+Check kernel params in cmdline
 
 ```shell
 grep Huge /proc/cmdline
 ```
 
-安装hugepage文件系统
+install hugepage filesystem
 
 ```shell
 mkdir -p /mnt/hugepage
 mount -t hugetlbfs hugetlbfs /mnt/hugepage 
 #不指定-o参数的话，挂在的hugepage会按照系统默认的大小挂载
-#或者
+# without -o option, it will use the default size to mount the hugepage
+# or
 mkdir -p /mnt/hugepage_2M
 mount -t hugetlbfs none /mnt/hugepage_2M -o pagesize=2MB
-#指定挂在了2MB大小的hugepage
+# mount 2M huagepages
 ```
 
-### 临时配置
-
-TODO
 
 
-
-### 检查Hugepage配置
+### Check hugepages
 
 ```shell
 grep Huge /proc/meminfo
 AnonHugePages:         0 kB
-HugePages_Total:       0 # Hugepage的总数量
-HugePages_Free:        0 # 剩余的Hugepage数量
-HugePages_Rsvd:        0 # 保留的Hugepage数量
-HugePages_Surp:        0 # 
-Hugepagesize:       2048 kB # hugepage的大小
+HugePages_Total:       0  
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
 
-mount -l | grep hugetlbfs #查看hugetlbfs是否挂载成功
+mount -l | grep hugetlbfs #check if hugepages successfully mounted
 ```
 
-## 参考
+## References
 
 [理解linux虚拟内存](https://zhenbianshu.github.io/2018/11/understand_virtual_memory.html)
 
