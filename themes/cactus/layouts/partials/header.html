@@ -7,7 +7,7 @@
   {{ else }}
   {{ end}}
   <div id="title">
-    <h1>{{ .Site.Title }}</h1>
+    <h1 style="font-size: 1.8rem;">{{ .Site.Title }}</h1>
   </div>
   </a>
   <div id="nav">
@@ -16,7 +16,7 @@
         <a href="#"><i class="fas fa-bars fa-2x"></i></a>
       </li>
       {{ range .Site.Menus.main }}
-        <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+        <li><a href="{{ .URL }}" style="font-size: 1rem;">{{ .Name }}</a></li>
       {{ end }}
     </ul>
   </div>

@@ -1,12 +1,10 @@
 ---
-title: "Ansible Reading Notes - Var"
+title: "Ansible - Var"
 date: 2021-10-01T00:10:57+08:00
 draft: false
 category: notes
 tags:
     - ansible
-    - system
-    - automation
 keywords:
     - ansible
     - automation

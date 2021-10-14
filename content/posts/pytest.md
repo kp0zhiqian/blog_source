@@ -3,7 +3,6 @@ title: "Pytest Notes"
 date: 2020-10-20T00:11:23+08:00
 draft: false
 tags:
-    - test
     - python
 keywords:
     - pytest

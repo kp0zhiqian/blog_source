@@ -4,9 +4,7 @@ date: 2021-10-14T00:10:57+08:00
 draft: false
 category: notes
 tags:
-    - container
     - kubernetes
-    - networking
 keywords:
     - ansible
     - automation

@@ -3,7 +3,7 @@ title: "Understanding Hugepage"
 date: 2020-10-20T00:11:23+08:00
 draft: false
 tags:
-    - systems
+    - system
 keywords:
     - Hugepage
 ---

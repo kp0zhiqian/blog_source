@@ -3,7 +3,7 @@ title: "Understanding OpenVswitch Hardware Offloading"
 date: 2021-05-20T00:11:23+08:00
 draft: false
 tags:
-    - ovs
+    - openvswitch
 keywords:
     - ovs hardware offloading
 ---

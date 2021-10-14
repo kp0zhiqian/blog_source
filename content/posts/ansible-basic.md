@@ -1,12 +1,10 @@
 ---
-title: "Ansible Reading Notes - Basic"
+title: "Ansible - Basic"
 date: 2021-09-30T00:10:57+08:00
 draft: false
 category: notes
 tags:
     - ansible
-    - system
-    - automation
 keywords:
     - ansible
     - automation

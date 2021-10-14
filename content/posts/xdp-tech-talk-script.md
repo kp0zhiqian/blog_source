@@ -3,7 +3,7 @@ title: "Transcript of XDP Tech Talk"
 date: 2021-05-21T00:11:23+08:00
 draft: false
 tags:
-    - XDP
+    - networking
 keywords:
     - xdp
     - ebpf

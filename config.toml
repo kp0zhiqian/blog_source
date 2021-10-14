@@ -2,10 +2,10 @@ baseURL = "https://kp0zhiqian.github.io"
 languageCode = "en-us"
 title = "kp0zhiqian's"
 theme = "cactus"
-copyright = "You" # cactus will use title if copyright is not set
+copyright = "Zhiqian Guan" # cactus will use title if copyright is not set
 disqusShortname = "example" # Used when comments is enabled. Cactus will use site title if not set
 # googleAnalytics = "UA-1234-5"
-
+paginate = 30
 # summaryLength = 2
 
 # Main menu which appears below site header.
@@ -50,11 +50,11 @@ weight = 4
   googleAnalyticsAsync = true # use asynchronous tracking. Synchronous tracking by default
 
   # Home page settings
-  description = "This is the way."
+  description = '"This is the way."'
   mainSection = "posts" # your main section
   showAllPostsOnHomePage = false # default
   postsOnHomePage = 50 # this option will be ignored if showAllPostsOnHomePage is set to true
-  tagsOverview = false # show tags overview by default.
+  tagsOverview = true # show tags overview by default.
   showProjectsList = false # show projects list by default (if projects data file exists).
   projectsUrl = "https://github.com/gohugoio" # title link for projects list
 

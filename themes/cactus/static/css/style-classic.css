@@ -319,7 +319,7 @@
 body h1,
 body .h1 {
   display: block;
-  margin-top: 3rem;
+  margin-top: 0rem;
   margin-bottom: 1rem;
   color: #4169E1;
   letter-spacing: 0.01em;

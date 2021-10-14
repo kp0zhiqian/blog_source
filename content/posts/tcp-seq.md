@@ -3,7 +3,7 @@ title: "From Simple Reliable Transport Protocol to TCP (1)"
 date: 2021-05-14T00:11:23+08:00
 draft: false
 tags:
-    - tcp
+    - networking
 keywords:
     - tcp seq
 ---

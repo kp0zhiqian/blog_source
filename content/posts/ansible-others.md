@@ -1,12 +1,10 @@
 ---
-title: "Ansible Reading Notes - Others"
+title: "Ansible - Others"
 date: 2021-10-04T00:10:57+08:00
 draft: false
 category: notes
 tags:
     - ansible
-    - system
-    - automation
 keywords:
     - ansible
     - automation
