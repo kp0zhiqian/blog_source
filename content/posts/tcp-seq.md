@@ -103,7 +103,3 @@ Let's review what we've done from the very beginning, we have added the fundamen
 - Timer and timeout for dealing with the case we lose the ack/nack information packets
 - Sliding window to improve the efficiency and "bandwidth"
 - Congestion control to dynamically set up sliding window and avoid congestion.
-
-Please keep in mind that this is more like a learning note to understand the TCP feature. In my next article, I'll start talking about how TCP implement these feature.
-
-See you.
