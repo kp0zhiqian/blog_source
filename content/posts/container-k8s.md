@@ -20,7 +20,7 @@ keywords:
 > "Container is NOT virtual machine!"
 > 
 
-![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled.png](../../post-imagek8s-container/Untitled.png)
+![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled.png](../../post-image/k8s-container/Untitled.png)
 
 Linux provides namespace and cgroup to isolate or limit resources between different process.
 
@@ -32,7 +32,7 @@ Namespace and cgroup are the mechanisms provided by Linux. The container is only
 
 ### OCI - Open Container Initiative
 
-![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%201.png](../../post-imagek8s-container/Untitled%201.png)
+![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%201.png](../../post-image/k8s-container/Untitled%201.png)
 
 Docker leads the OCI. OCI defines the way to run a container, how to set up the namespace and cgroup, also includes the format of a container image, configuration, and metadata. 
 
@@ -56,20 +56,20 @@ OCI is a standard that defines how to create/run/manage a container. CRI is a st
 
 Docker is a container management tool that has features like build/pull/run container. After installing Docker, you will get at least 3 components: runC, containerd, dockerd, also include a docker cli client. The relationship between the 3 main components can be described as below chart.
 
-![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%202.png](../../post-imagek8s-container/Untitled%202.png)
+![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%202.png](../../post-image/k8s-container/Untitled%202.png)
 
 1. Docker CLI client send commands to the Dockerd who is the daemon of Docker.
 2. Dockerd then call containerd to create container.
 3. Containerd will fork a child process containerd-shim
 4. containerd-shim will use runC to create the target container.
 
-![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%203.png](../../post-imagek8s-container/Untitled%203.png)
+![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%203.png](../../post-image/k8s-container/Untitled%203.png)
 
 ## Podman
 
 Podman is also a container management tool. But unlike Docker needs a daemon running at the backend, Podman directly creates and manages the container. Podman also uses runC, which means it implements OCI standards.
 
-![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%204.png](../../post-imagek8s-container/Untitled%204.png)
+![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%204.png](../../post-image/k8s-container/Untitled%204.png)
 
 Podman and Docker are the same when you using the cli
 
@@ -77,7 +77,7 @@ Podman and Docker are the same when you using the cli
 
 cri-o is a container runtime published by Redhat, implementing both OCI and CRI standards. It uses OCI to communicate with runC, CRI to communicate with Kubernetes. The purpose of cri-o is not a tool like Docker or Podman but a runtime component that can be used by Kubernetes. For this reason, cri-o is actually only running as a daemon. cri-o works like a component of Kubernetes, so it has no cli interface, which means we cannot use cri-o directly from cli. But there's also an open-source tool called crictl. crictl works as a cri-o client, but only has limited features. crictl is usually used by k8s developers as a dev tool. Cri-o achieves CRI to the north Kubernetes, achieves OCI to the south by runC.
 
-![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%205.png](../../post-imagek8s-container/Untitled%205.png)
+![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%205.png](../../post-image/k8s-container/Untitled%205.png)
 
 Openshift is just a platform developed based on Kubernetes with many more advanced features. From the perspective of the low-level implementation, Openshift and Kubernetes is basically the same. It uses cri-o as it's container runtime, which is why we use cri-o and crictl in our SR-IOV container testing.
 
@@ -139,7 +139,7 @@ Worker plane(node): Where the actual container is running, worker node use kubel
 
 The concept of control node and worker node is similar to the control plane and data plane in SDN.
 
-![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%206.png](../../post-imagek8s-container/Untitled%206.png)
+![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%206.png](../../post-image/k8s-container/Untitled%206.png)
 
 ### How to operate Openshift/Kubernetes
 
@@ -173,7 +173,7 @@ In a yaml file like this, we will define what our application needs. So if our a
 
 🎯After submitting such yaml file to the openshift control plane, openshift will find the worker node who has the SR-IOV function, and schedule the pod to it. Then CNI plugin will do its work.
 
-![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%207.png](../../post-imagek8s-container/Untitled%207.png)
+![SR-IOV%20Container%20Test%20f0bdf8e02a57412cbecc70845fe60bb0/Untitled%207.png](../../post-image/k8s-container/Untitled%207.png)
 
 ### ⁉️How does the openshift know which worker node has the SR-IOV function?
 
@@ -190,7 +190,7 @@ So the process will be like:
 3. daemonSet and operator initiate the SR-IOV function and report to the openshift control node
 4. openshift receive a request to create a Pod with SR-IOV VF
 5. openshift pick up SR-IOV function worker node from its database, and schedule the Pod to the certain worker node
-6. Worker node call SR-IOV CNI Plugin to configure container network and IP/route 👈 **THIS IS WHERE OUR TEST HAPPENS**
+6. Worker node call SR-IOV CNI Plugin to configure container network and IP/route
 
 ### Script to create and run a container that use SR-IOV
 
