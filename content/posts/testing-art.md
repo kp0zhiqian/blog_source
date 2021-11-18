@@ -8,4 +8,4 @@ keywords:
     - testing
 ---
 
-![software-testing-mindmap](../../post-image/art-testing/markmap.svg)
+![software-testing-mindmap](../../post-image/art-testing/markmap.png)
