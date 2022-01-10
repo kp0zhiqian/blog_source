@@ -7,5 +7,5 @@ tags:
 keywords:
     - testing
 ---
-
+## mindmap
 ![software-testing-mindmap](../../post-image/art-testing/markmap.png)
